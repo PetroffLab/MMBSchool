@@ -15,16 +15,19 @@ int main(){
   cout << "Start" << endl;
   tk::spline s = surface(size, 1.0);
 
-  double dt = 0.01;
+  double dt = 0.0001;
   double tEnd = 1.0;
   int tTot = (int)(tEnd/dt);
 
   ofstream file;
   file.open("Particle.dat");
-  file << 0.75 << "\t" << 0 << endl;
-  double x = 0.75;
-  double v = 0;
-  double prob = 0.8;
+  ofstream pos;
+  pos.open("Position.dat");
+  file << 0.5 << "\t" << 0 << endl;
+  pos << 0.5 << "\t" << s(0.5) << endl;
+  double x = 0.5;
+  double v = 0.0;
+  double prob = 0.5;
   double D = 0;
   vector<double> newDat(2);
 
@@ -34,6 +37,7 @@ int main(){
     x = newDat[0];
     v = newDat[1];
     file << x << "\t" << v << endl;
+    pos << x << "\t" << s(x) << endl;
   }
   file.close();
 }
@@ -70,26 +74,26 @@ tk::spline surface(int size, double dev){
 //  *Updates the poisiton data for a single particle
 vector<double> update_data(tk::spline s, double dt, double x, double v, double prob, int size, double D){
   bool vdir = v >= 0;
-  bool sdir = s(x+pow(10,-4))-s(x) <= 0;
+  bool sdir = s(x+pow(10,-8))-s(x) <= 0;
   default_random_engine generator;
   normal_distribution<double> distribution(0.5,0.5);
   double dw = sqrt(dt)*distribution(generator);
-  double newv = -((s(x+pow(10,-4))-s(x))/pow(10,-4)) - v;
+  double newv = -((s(x+pow(10,-8))-s(x))/pow(10,-8)) + v;
   cout << newv << endl;
   double dx = (newv*dt) + (sqrt(D)*dw);
   vector<double> soln(2);
 
   if(vdir && sdir){
     soln[0] = x + dx;
-    soln[1] = dx/dt;
+    soln[1] = newv;
   } else{
     double p = (double)rand()/RAND_MAX;
     if(p <= prob){
       soln[0] = x + dx;
-      soln[1] = dx/dt;
+      soln[1] = newv;
     } else{
-      soln[0] = x + -(s(x+pow(10,-4))-s(x))/pow(10,-4);
-      soln[1] = ((-(s(x+pow(10,-4))-s(x))/pow(10,-4)*dt) + (sqrt(D)*dw))/dt;
+      soln[0] = x;
+      soln[1] = 0;
     }
   }
 
