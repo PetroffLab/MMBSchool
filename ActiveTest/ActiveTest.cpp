@@ -11,7 +11,7 @@ vector<double> update_data(tk::spline s, double dt, double x, double v, double p
 
 // Main Function
 int main(){
-  int size = 100;
+  int size = 10;
   cout << "Start" << endl;
   tk::spline s = surface(size, 1.0);
 
@@ -79,7 +79,7 @@ vector<double> update_data(tk::spline s, double dt, double x, double v, double p
   normal_distribution<double> distribution(0.5,0.5);
   double dw = sqrt(dt)*distribution(generator);
   double newv = -((s(x+pow(10,-8))-s(x))/pow(10,-8)) + v;
-  cout << newv << endl;
+  //cout << newv << endl;
   double dx = (newv*dt) + (sqrt(D)*dw);
   vector<double> soln(2);
 
