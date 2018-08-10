@@ -1,6 +1,6 @@
-PROGRAM=KinderArmedBandit
+PROGRAM=KinderArmedBanditSimpler
 
-SRC=KinderArmedBandit.cpp
+SRC=KinderArmedBanditSimpler.cpp
 
 all: ${PROGRAM}
 	g++ ${SRC} -o ${PROGRAM}
